@@ -1,0 +1,41 @@
+const Create = async (req,res)=>{
+    try {
+        res.json({msg: "Create Transaction route"})
+    } catch (error) {
+        res.json(error)
+    }
+}
+const getOne = async (req,res)=>{
+    const id = req.params.id
+    
+    try {
+        res.json({msg: `Detail Transaction by ${id}`})
+    } catch (error) {
+        res.json(error)
+    }
+}
+const getAll = async (req,res)=>{
+    try {
+        res.json({msg: "All Transaction route"})
+    } catch (error) {
+        res.json(error)
+    }
+}
+const Update = async (req,res)=>{
+    try {
+        res.json({msg: "Update Transaction route"})
+    } catch (error) {
+        res.json(error)
+    }
+}
+const Delete = async (req,res)=>{
+    try {
+        res.json({msg: "Delete Transaction route"})
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+module.exports = {
+    Create,getOne,getAll,Update,Delete
+}

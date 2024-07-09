@@ -1,51 +1,18 @@
 const express = require('express')
+const {register,login,getAll,getOne,Update,Delete} = require('../../controllers/user/user_Controller')
 const userRoutes = express.Router();
 
 //Register
-userRoutes.post("/register", async (req,res)=>{
-    
-    try {
-        res.json({msg: "Register route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+userRoutes.post("/register", register)
  //Login
-userRoutes.post("/login", (req,res)=>{
-    
-    try {
-        res.json({msg: "Login route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
-
+userRoutes.post("/login", login)
 //Detail
-userRoutes.get("/:id", async (req,res)=>{
-
-    const id = req.params.id
-    
-    try {
-        res.json({msg: `Detail route by ${id}`})
-    } catch (error) {
-        res.json(error)
-    }
-})
+userRoutes.get("/:id", getOne)
+//Detail
+userRoutes.get("/user", getAll)
  //Update
-userRoutes.put("/:id", (req,res)=>{
-    try {
-        res.json({msg: "Update route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+userRoutes.put("/:id",Update)
  //Delete
-userRoutes.delete("/:id", (req,res)=>{
-    try {
-        res.json({msg: "Delete route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+userRoutes.delete("/:id",Delete)
 
 module.exports = userRoutes;

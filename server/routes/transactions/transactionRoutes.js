@@ -1,54 +1,18 @@
 const express = require('express')
+const {Create,getOne,getAll,Update,Delete} = require('../../controllers/transactions/transaction_Controller')
 const transactionsRoutes = express.Router();
 
 //Router Transaction
 //Create Transaction
-transactionsRoutes.post("/", async (req,res)=>{
-    
-    try {
-        res.json({msg: "Create Transaction route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+transactionsRoutes.post("/", Create)
 
 //Single
-transactionsRoutes.get("/:id", async (req,res)=>{
-    
-    const id = req.params.id
-    
-    try {
-        res.json({msg: `single Transaction route by ${id}`})
-    } catch (error) {
-        res.json(error)
-    }
-})
+transactionsRoutes.get("/:id", getOne)
 //all
-transactionsRoutes.get("/", async (req,res)=>{
-    
-    const id = req.params.id
-    
-    try {
-        res.json({msg: `All Transaction route `})
-    } catch (error) {
-        res.json(error)
-    }
-})
+transactionsRoutes.get("/",getAll)
  //Update
-transactionsRoutes.put("/:id", (req,res)=>{
-    try {
-        res.json({msg: "Update Transaction route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+transactionsRoutes.put("/:id",Update)
  //Delete
-transactionsRoutes.delete("/:id", (req,res)=>{
-    try {
-        res.json({msg: "Delete Transaction route"})
-    } catch (error) {
-        res.json(error)
-    }
-})
+transactionsRoutes.delete("/:id",Delete)
 
 module.exports = transactionsRoutes;
