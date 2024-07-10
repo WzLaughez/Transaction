@@ -1,4 +1,5 @@
 const express = require('express')
+require('./config/dbConnect');
 const app = express();
 const usersRoute = require('./routes/users/usersRoutes')
 const transactionsRoute = require('./routes/transactions/transactionRoutes')
@@ -14,7 +15,7 @@ app.use('/api/v1/account', accountRoute)
 //error handle
 
 //listen to server
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, (req,res) =>{
     console.log(`Server listen in port ${PORT} `);
 })
