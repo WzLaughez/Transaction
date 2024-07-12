@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const dbConnect = async ()=>{
     try {
         await mongoose.connect(
-            'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4'
+            'mongodb://localhost:27017/project_mern'
         );
         console.log("Db Connected Succesfully");
     } catch (error) {
