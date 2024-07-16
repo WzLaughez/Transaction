@@ -1,10 +1,11 @@
 const express = require('express')
-const {Create,getOne,getAll,Update,Delete} = require('../../controllers/transactions/transaction_Controller')
+const {Create,getOne,getAll,Update,Delete} = require('../../controllers/transactions/transaction_Controller');
+const isLogin = require('../../middleware/isLogin');
 const transactionsRoutes = express.Router();
 
 //Router Transaction
 //Create Transaction
-transactionsRoutes.post("/", Create)
+transactionsRoutes.post("/", isLogin, Create)
 
 //Single
 transactionsRoutes.get("/:id", getOne)

@@ -13,7 +13,7 @@ const transactionSchema = new mongoose.Schema({
         ],
         required: true,
     },
-    amoung:{
+    amount:{
         type: Number,
         required: true
     },
@@ -42,7 +42,8 @@ const transactionSchema = new mongoose.Schema({
     },
     createdBy:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"User"
+        ref:"User",
+        required: true,
     },
     date:{
         type: Date,

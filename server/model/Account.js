@@ -34,7 +34,7 @@ const accountSchema = new mongoose.Schema({
     [    
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref:"Transactions"
+            ref:"Transaction"
         },
     ],
     createdBy:{

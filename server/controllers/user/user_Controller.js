@@ -57,7 +57,6 @@ const getOne = async (req,res)=>{
     try {
         const user = req.user;
         const userrequest = await User.findById(user); 
-        console.log(userrequest);
         
         const id = req.params.id
         res.json({file : userrequest,
@@ -68,7 +67,9 @@ const getOne = async (req,res)=>{
 }
 const getAll = async (req,res)=>{
     try {
-        res.json({msg: "getAll route"})
+        
+        const user = await User.find().populate('accounts');
+        res.json(user)
     } catch (error) {
         res.json(error)
     }
