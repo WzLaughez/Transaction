@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require("../../model/User");
 const { errorApp, AppErr } = require('../../utils/AppError');
+const generateToken = require('../../utils/generateToken');
+const verifyToken = require('../../utils/verifyToken');
 
 const register = async (req,res,next)=>{
     const {fullname, password, email} = req.body
@@ -39,19 +41,27 @@ const login = async (req,res,next)=>{
         const MatchPassword = await bcrypt.compare(password, userFound.password);
         if(!MatchPassword) return next(errorApp('Invalid login Credential',400))
 
-        res.json({status: "success",
+        res.json({
+            status: "success",
             fullname : userFound.fullname,
-            id : userFound._id
+            id : userFound._id,
+            token : generateToken(userFound._id)
         })
     } catch (error) {
         next(new Error(error))
     }
 }
 const getOne = async (req,res)=>{
-    const id = req.params.id
+    
     
     try {
-        res.json({msg: `Detail route by ${id}`})
+        const user = req.user;
+        const userrequest = await User.findById(user); 
+        console.log(userrequest);
+        
+        const id = req.params.id
+        res.json({file : userrequest,
+            msg: `Detail route by ${id}`})
     } catch (error) {
         res.json(error)
     }
