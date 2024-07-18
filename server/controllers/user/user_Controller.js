@@ -3,6 +3,7 @@ const User = require("../../model/User");
 const { errorApp, AppErr } = require('../../utils/AppError');
 const generateToken = require('../../utils/generateToken');
 const verifyToken = require('../../utils/verifyToken');
+const { model } = require('mongoose');
 
 const register = async (req,res,next)=>{
     const {fullname, password, email} = req.body
@@ -30,7 +31,7 @@ const register = async (req,res,next)=>{
             id: user.id,
             msg: "User Created"})
     } catch (error) {
-        next(new Error(error))
+        next(new AppErr(error.message, 500))
     }
 }
 const login = async (req,res,next)=>{
@@ -48,47 +49,110 @@ const login = async (req,res,next)=>{
             token : generateToken(userFound._id)
         })
     } catch (error) {
-        next(new Error(error))
+        next(new AppErr(error.message, 500))
     }
 }
-const getOne = async (req,res)=>{
+// const getOne = async (req,res)=>{
     
-    
+//     try {
+//         const userrequest = await User.findById(req.user).populate(
+//             {
+//                 path:'accounts',
+//                 populate:{
+//                     path:'transactions',
+//                     model:"Transaction",
+//                 }
+//             }
+//         );
+//         res.json({
+            
+//             user : userrequest,
+//             msg: `Detail route by ${id}`})
+//     } catch (error) {
+//         res.json(error)
+//     }
+// }
+
+const getAll = async (req,res, next)=>{
     try {
-        const user = req.user;
-        const userrequest = await User.findById(user); 
         
-        const id = req.params.id
-        res.json({file : userrequest,
-            msg: `Detail route by ${id}`})
-    } catch (error) {
-        res.json(error)
-    }
-}
-const getAll = async (req,res)=>{
-    try {
-        
-        const user = await User.find().populate('accounts');
+        const user = await User.findById(req.user).populate(
+            {
+                path:'accounts',
+                populate:{
+                    path:'transactions',
+                    model:"Transaction",
+                }
+            }
+        );
         res.json(user)
     } catch (error) {
-        res.json(error)
+        next(new AppErr(error.message, 500))
     }
 }
-const Update = async (req,res)=>{
+const Update = async (req,res,next)=>{
     try {
-        res.json({msg: "Register route"})
+        // Change Email, if exist return error email alr exist
+        if(req.body.email)
+        {
+            const emailFound = await User.findOne({email:req.body.email})
+            if(emailFound) return next(new AppErr('Email already Exist', 404))
+        }
+        
+        // Change Password
+        if(req.body.password){
+            //hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password,salt);
+        
+            //Update the user
+            const UpdateUser = await User.findByIdAndUpdate(req.user, {
+                password: hashedPassword,
+            },
+            {
+                new:true,
+                runValidators:true,
+            })
+            return res.status(200).json({
+                status:"Password Change",
+                data:UpdateUser
+            })
+        }
+
+        //Just Update the user
+        // Find id first
+        if(!(await User.findById(req.user))){
+            return next(new AppErr("No account with this id", 404))
+        }
+        //Update
+        const update = await User.findByIdAndUpdate(req.user,
+            req.body,
+            {
+                new:true,
+                runValidators:true,
+            }
+        )
+        res.status(200).json({
+            status:"success",
+            data:update,
+        })
     } catch (error) {
-        res.json(error)
+        next(new AppErr(error.message, 500))
     }
 }
-const Delete = async (req,res)=>{
+const Delete = async (req,res,next)=>{
     try {
-        res.json({msg: "Register route"})
+        //Jika ingin menghapus akun sendiri
+        const userFound = await User.findByIdAndDelete(req.user)
+        res.status(200).json({
+            status:"User Deleted",
+            data:null
+        })
     } catch (error) {
-        res.json(error)
+        next(new AppErr(error.message, 500))
     }
 }
 
 module.exports = {
-    register,login,getOne,getAll,Update,Delete
+    register,login,getAll,Update,Delete
 }

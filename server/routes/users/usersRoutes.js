@@ -1,5 +1,5 @@
 const express = require('express')
-const {register,login,getAll,getOne,Update,Delete} = require('../../controllers/user/user_Controller');
+const {register,login,getAll,Update,Delete} = require('../../controllers/user/user_Controller');
 const isLogin = require('../../middleware/isLogin');
 const userRoutes = express.Router();
 
@@ -8,12 +8,12 @@ userRoutes.post("/register", register)
  //Login
 userRoutes.post("/login", login)
 //Detail
-userRoutes.get("/", getAll)
+userRoutes.get("/", isLogin, getAll)
 //single
-userRoutes.get("/:id", isLogin, getOne)
+// userRoutes.get("/:id", isLogin, getOne)
  //Update
-userRoutes.put("/:id",Update)
+userRoutes.put("/",isLogin, Update)
  //Delete
-userRoutes.delete("/:id",Delete)
+userRoutes.delete("/",isLogin, Delete)
 
 module.exports = userRoutes;
